@@ -33,7 +33,7 @@ export const signup = async (req, res) => {
       password: hashedPassword,
       name,
       verificationToken,
-      verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
+      verificationTokenExpiresAt: Date.now() + 15 * 60 * 1000, // 15 minutes
     });
 
     await user.save();
@@ -142,7 +142,7 @@ export const forgotPassword = async (req, res) => {
 
     // generate reset token
     const resetToken = crypto.randomBytes(32).toString('hex');
-    const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000;
+    const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; // 1 hour
 
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpiresAt = resetTokenExpiresAt;
