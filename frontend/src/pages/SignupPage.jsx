@@ -1,16 +1,25 @@
 import { motion } from 'framer-motion';
 import { Loader, Lock, Mail, User } from 'lucide-react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Input } from '../components';
+import { Link, useNavigate } from 'react-router-dom';
+import { Input, PasswordStrengthMeter } from '../components';
+import { useAuthStore } from '../store/authStore';
 
 const SignUpPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { signup, isLoading, error } = useAuthStore();
+  const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+    try {
+      await signup(email, password, name);
+      navigate('/verify-email');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -48,7 +57,9 @@ const SignUpPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {/* Password strength meter */}
+
+          {error && <p className='text-red-500 font-semibold mt-2'>{error}</p>}
+          <PasswordStrengthMeter password={password} />
 
           <motion.button
             className='mt-5 w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white 
@@ -59,7 +70,11 @@ const SignUpPage = () => {
             whileTap={{ scale: 0.98 }}
             type='submit'
           >
-            'Sign Up'
+            {isLoading ? (
+              <Loader className=' animate-spin mx-auto' size={24} />
+            ) : (
+              'Sign Up'
+            )}
           </motion.button>
         </form>
       </div>
