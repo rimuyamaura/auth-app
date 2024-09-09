@@ -58,10 +58,10 @@ export const signup = async (req, res) => {
 };
 
 export const verifyEmail = async (req, res) => {
-  const { code } = req.body;
+  const { verificationCode } = req.body;
   try {
     const user = await User.findOne({
-      verificationToken: code,
+      verificationToken: verificationCode,
       verificationTokenExpiresAt: { $gt: Date.now() },
     });
 
@@ -86,7 +86,9 @@ export const verifyEmail = async (req, res) => {
         password: undefined,
       },
     });
-  } catch (error) {}
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
 };
 
 export const login = async (req, res) => {
