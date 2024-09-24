@@ -33,3 +33,17 @@ Build and run with
 npm run build
 npm start
 ```
+
+For development
+
+```
+# terminal1 at /frontend
+npm i
+npm run dev
+```
+
+```
+# terminal2 at root
+npm i
+npm run dev
+```
